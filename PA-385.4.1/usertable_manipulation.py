@@ -30,20 +30,53 @@ from mysql.connector import Error
 # generate_user_table()
 
 
-def insert_into_table(email, name, password):
-    try:
-        conn = mydbconnection.connect(database='RegistrationDB', user='root',password='password', port ='3306')
+# def insert_into_table(email, name, password):
+#     try:
+#         conn = mydbconnection.connect(database='RegistrationDB', user='root',password='password', port ='3306')
         
-        cursor = conn.cursor()
-        mySql_insert_query = """INSERT INTO user (email, name, password) VALUES (%s, %s, %s) """                  
+#         cursor = conn.cursor()
+#         mySql_insert_query = """INSERT INTO user (email, name, password) VALUES (%s, %s, %s) """                  
 
-        record = (email, name, password)
-        cursor.execute(mySql_insert_query, record)
-        conn.commit()
-        print("Record inserted successfully into User table \n")
+#         record = (email, name, password)
+#         cursor.execute(mySql_insert_query, record)
+#         conn.commit()
+#         print("Record inserted successfully into User table \n")
+
+#     except Error as error:
+#         print("Failed to insert into MySQL table {}".format(error))
+
+#     finally:
+#         if conn.is_connected():
+#             cursor.close()
+#             conn.close()
+#             print("MySQL connection is closed")
+
+
+# insert_into_table('ywbaek@perscholas.org', 'young', 'letsgomets')
+# insert_into_table('mcordon@perscholas.org', 'marcial', 'perscholas')
+# insert_into_table('mhaseeb@perscholas.org', 'haseeb', 'platform')
+
+
+def get_all_users():
+    try:
+        conn = mydbconnection.connect(database='RegistrationDB', user='root', password='password', port ='3306')
+        cursor = conn.cursor()
+
+        sql_select_query = "select * from user"
+        cursor.execute(sql_select_query)
+
+        # fetch result
+        record = cursor.fetchall()
+
+        for row in record:
+            print("Id = ", row[0])
+            print("Email = ", row[1])
+            print("Name = ", row[2])
+            print("Password  = ", row[3], "\n")
+
 
     except Error as error:
-        print("Failed to insert into MySQL table {}".format(error))
+        print("Failed to fetch data from user table {}".format(error))
 
     finally:
         if conn.is_connected():
@@ -51,10 +84,7 @@ def insert_into_table(email, name, password):
             conn.close()
             print("MySQL connection is closed")
 
-
-insert_into_table('ywbaek@perscholas.org', 'young', 'letsgomets')
-insert_into_table('mcordon@perscholas.org', 'marcial', 'perscholas')
-insert_into_table('mhaseeb@perscholas.org', 'haseeb', 'platform')
-
+get_all_users()
+    
 
 
