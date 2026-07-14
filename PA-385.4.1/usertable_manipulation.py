@@ -57,34 +57,57 @@ from mysql.connector import Error
 # insert_into_table('mhaseeb@perscholas.org', 'haseeb', 'platform')
 
 
-def get_all_users():
-    try:
-        conn = mydbconnection.connect(database='RegistrationDB', user='root', password='password', port ='3306')
-        cursor = conn.cursor()
+# def get_all_users():
+#     try:
+#         conn = mydbconnection.connect(database='RegistrationDB', user='root', password='password', port ='3306')
+#         cursor = conn.cursor()
 
-        sql_select_query = "select * from user"
-        cursor.execute(sql_select_query)
+#         sql_select_query = "select * from user"
+#         cursor.execute(sql_select_query)
 
-        # fetch result
-        record = cursor.fetchall()
+#         # fetch result
+#         record = cursor.fetchall()
 
-        for row in record:
-            print("Id = ", row[0])
-            print("Email = ", row[1])
-            print("Name = ", row[2])
-            print("Password  = ", row[3], "\n")
+#         for row in record:
+#             print("Id = ", row[0])
+#             print("Email = ", row[1])
+#             print("Name = ", row[2])
+#             print("Password  = ", row[3], "\n")
 
 
-    except Error as error:
-        print("Failed to fetch data from user table {}".format(error))
+#     except Error as error:
+#         print("Failed to fetch data from user table {}".format(error))
 
-    finally:
-        if conn.is_connected():
-            cursor.close()
-            conn.close()
-            print("MySQL connection is closed")
+#     finally:
+#         if conn.is_connected():
+#             cursor.close()
+#             conn.close()
+#             print("MySQL connection is closed")
 
-get_all_users()
+# get_all_users()
     
+def get_user_by_name(name):
+    
+    conn = mydbconnection.connect(database='RegistrationDB', user='root', password='password', port ='3306')
+    cursor = conn.cursor()
 
+    sql_select_query = """select * from user where name = %s"""
+
+
+    # set variable in query
+    cursor.execute(sql_select_query, (name,))
+    # fetch result
+    record = cursor.fetchall()
+
+    for row in record:
+        print("Email = ", row[1])
+        print("Password  = ", row[3], "\n")
+        
+        cursor.close()
+        conn.close()
+        print("MySQL connection is closed")
+
+get_user_by_name('young')
+get_user_by_name('marcial')
+get_user_by_name('haseeb')
 
