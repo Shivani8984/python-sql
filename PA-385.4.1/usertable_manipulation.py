@@ -86,28 +86,57 @@ from mysql.connector import Error
 
 # get_all_users()
     
-def get_user_by_name(name):
+# def get_user_by_name(name):
     
-    conn = mydbconnection.connect(database='RegistrationDB', user='root', password='password', port ='3306')
-    cursor = conn.cursor()
+#     conn = mydbconnection.connect(database='RegistrationDB', user='root', password='password', port ='3306')
+#     cursor = conn.cursor()
 
-    sql_select_query = """select * from user where name = %s"""
+#     sql_select_query = """select * from user where name = %s"""
 
 
-    # set variable in query
-    cursor.execute(sql_select_query, (name,))
-    # fetch result
-    record = cursor.fetchall()
+#     # set variable in query
+#     cursor.execute(sql_select_query, (name,))
+#     # fetch result
+#     record = cursor.fetchall()
 
-    for row in record:
-        print("Email = ", row[1])
-        print("Password  = ", row[3], "\n")
+#     for row in record:
+#         print("Email = ", row[1])
+#         print("Password  = ", row[3], "\n")
         
-        cursor.close()
-        conn.close()
-        print("MySQL connection is closed")
+#         cursor.close()
+#         conn.close()
+#         print("MySQL connection is closed")
 
-get_user_by_name('young')
-get_user_by_name('marcial')
-get_user_by_name('haseeb')
+# get_user_by_name('young')
+# get_user_by_name('marcial')
+# get_user_by_name('haseeb')
 
+
+def validate_user(email, password):
+    try:
+        conn = mydbconnection.connect(database='RegistrationDB', user='root', password='password', port ='3306')
+        cursor = conn.cursor()
+
+        sql_select_query = """SELECT * FROM user WHERE Email = %s AND Password = %s"""
+      
+        cursor.execute(sql_select_query, (email, password))
+        record = cursor.fetchall()
+        # print(record)
+
+        # Return True if at least one matching user exists
+        if len(record) > 0:
+            return True
+        else:
+            return False
+        
+
+    except Error as e:
+        print("Error while validating user:", e)
+        return False
+
+    finally:
+        if conn.is_connected():
+            conn.close()
+
+print(validate_user('mcordon@perscholas.org','perscholas'))
+print(validate_user('shiv@perscholas.org','perscholasss'))
